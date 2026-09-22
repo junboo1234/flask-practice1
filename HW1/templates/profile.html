@@ -1,2 +1,4 @@
 <!-- templates/profile.html -->
 {%for h in habit%} {{h}} {%endfor%}
+<a href="{{ url_for('name_template_render') }}">메인</a>
+<a href="{{ url_for('greet_template_render', name='준보') }}">인사</a>
