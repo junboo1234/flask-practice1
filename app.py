@@ -1,6 +1,12 @@
+from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
 
-from flask import Flask, url_for, request,  render_template
+
 app = Flask(__name__)
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///todo.db'
+db = SQLAlchemy(app)
+
 @app.route('/')
 def index():
     return f"<a href='{url_for('about')}'>소개로</a>"
@@ -8,9 +14,6 @@ def index():
 def about():
     return '소개 페이지'
 
-#@app.route('/user/<username>')
-#def profile(username):
-#    return f'{username} 님의 프로필'
 @app.route('/post/<int:pid>')
 def post(pid):
     return f'{pid}번 글 (자료형: {type(pid).__name__})'
@@ -65,8 +68,15 @@ def user_profile(username):
                            username=username,
                            posts={'첫 글', '두 번째 글'})
 
+class Todo(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    text = db.Column(db.String(100), nullable=False)
+    done = db.Column(db.Boolean, default=False)
+    def __repr__(self):
+        return f'<Todo {self.id} {self.text}>'
 
-
+with app.app_context():
+ db.create_all()
 
 
 if __name__ == "__main__":
