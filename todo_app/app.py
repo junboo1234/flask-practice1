@@ -73,11 +73,8 @@ class TodoList(Resource):
     @ns.doc("목록 보기")
     @ns.marshal_list_with(todo_model)
     def get(self):
-        """done 을 주면 걸러서 돌려준다"""
-        q = Todo.query
-        done = request.args.get("done")
-        q = q.filter_by(done=(done == "true"))
-        return q.all()
+        """할 일을 전부 돌려준다"""
+        return Todo.query.all()
     @ns.doc("새로 만들기")
     @ns.expect(todo_input, validate=True)
     @ns.marshal_with(todo_model, code=201)
